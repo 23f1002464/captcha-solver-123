@@ -1,1 +1,110 @@
-<!DOCTYPE html>\n<html lang="en">\n<head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>Captcha Solver</title>\n    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">\n</head>\n<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">\n    <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">\n        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Captcha Solver</h1>\n\n        <div class="mb-4">\n            <label for="imageUrl" class="block text-gray-700 text-sm font-bold mb-2">Image URL (or leave blank for sample):</label>\n            <input type="text" id="imageUrl" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="https://example.com/captcha.png">\n        </div>\n        <button id="loadImageBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-6 w-full">Load Image</button>\n\n        <div class="flex justify-center mb-6">\n            <img id="captchaImage" src="sample.png" alt="Captcha Image" class="border border-gray-300 rounded max-w-full h-auto">\n        </div>\n\n        <div class="mb-4">\n            <label for="captchaInput" class="block text-gray-700 text-sm font-bold mb-2">Enter Captcha Text:</label>\n            <input type="text" id="captchaInput" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter text from image">\n        </div>\n\n        <button id="submitBtn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">Verify Captcha</button>\n\n        <p id="result" class="text-center mt-4 text-lg font-semibold"></p>\n    </div>\n\n    <script>\n        const captchaImage = document.getElementById('captchaImage');\n        const imageUrlInput = document.getElementById('imageUrl');\n        const loadImageBtn = document.getElementById('loadImageBtn');\n        const captchaInput = document.getElementById('captchaInput');\n        const submitBtn = document.getElementById('submitBtn');\n        const resultParagraph = document.getElementById('result');\n\n        // Hardcoded solution for sample.png\n        const sampleSolution = "ADUR3"; \n        \n        // Function to load image based on URL\n        function loadImage(url) {\n            captchaImage.src = url;\n            captchaImage.onerror = () => {\n                resultParagraph.textContent = 'Error loading image. Please check the URL.';\n                resultParagraph.className = 'text-center mt-4 text-lg font-semibold text-red-600';\n            };\n            captchaImage.onload = () => {\n                resultParagraph.textContent = ''; // Clear previous errors\n            };\n        }\n\n        // Check for URL parameter on page load\n        document.addEventListener('DOMContentLoaded', () => {\n            const params = new URLSearchParams(window.location.search);\n            const urlParam = params.get('url');\n            if (urlParam) {\n                imageUrlInput.value = urlParam;\n                loadImage(urlParam);\n            } else {\n                loadImage('sample.png'); // Default to attached sample\n            }\n        });\n\n        // Event listener for loading image from input field\n        loadImageBtn.addEventListener('click', () => {\n            const url = imageUrlInput.value.trim();\n            if (url) {\n                loadImage(url);\n            } else {\n                loadImage('sample.png');\n                imageUrlInput.value = ''; // Clear input if sample is loaded\n            }\n        });\n\n        // Event listener for verifying captcha\n        submitBtn.addEventListener('click', () => {\n            const userAnswer = captchaInput.value.trim().toUpperCase(); // Convert to uppercase for case-insensitivity\n            // This is a static solver. For a real captcha, you'd send this to a backend.\n            // For this demo, we check against the hardcoded solution for the *sample.png*.\n            // If another image is loaded, this demo won't "solve" it, but it allows user input.\n            if (captchaImage.src.includes('sample.png')) {\n                if (userAnswer === sampleSolution) {\n                    resultParagraph.textContent = 'Correct!';\n                    resultParagraph.className = 'text-center mt-4 text-lg font-semibold text-green-600';\n                } else {\n                    resultParagraph.textContent = 'Incorrect, try again.';\n                    resultParagraph.className = 'text-center mt-4 text-lg font-semibold text-red-600';\n                }\n            } else {\n                // If a different image is loaded, we can't verify it client-side without a real captcha solving engine.\n                // We'll just indicate that user input was received.\n                resultParagraph.textContent = 'Input received for custom image. (No client-side verification for custom images)';\n                resultParagraph.className = 'text-center mt-4 text-lg font-semibold text-blue-600';\n            }\n        });\n    </script>\n</body>\n</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captcha Solver</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Custom styles for Apple-like feel */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    </style>
+</head>
+<body class="bg-blue-900 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full">
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Captcha Solver</h1>
+
+        <div class="mb-4">
+            <label for="imageUrl" class="block text-gray-700 text-sm font-bold mb-2">Image URL (or leave blank for sample):</label>
+            <input type="text" id="imageUrl" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="https://example.com/captcha.png">
+        </div>
+        <button id="loadImageBtn" class="bg-gray-100 text-gray-800 font-semibold py-3 px-6 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-opacity-75 mb-6 w-full transition duration-150 ease-in-out">Load Image</button>
+
+        <div class="flex justify-center mb-6">
+            <img id="captchaImage" src="sample.png" alt="Captcha Image" class="border border-gray-300 rounded max-w-full h-auto">
+        </div>
+
+        <div class="mb-4">
+            <label for="captchaInput" class="block text-gray-700 text-sm font-bold mb-2">Enter Captcha Text:</label>
+            <input type="text" id="captchaInput" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter text from image">
+        </div>
+
+        <button id="submitBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 w-full transition duration-150 ease-in-out">Verify Captcha</button>
+
+        <p id="result" class="text-center mt-4 text-lg font-semibold"></p>
+    </div>
+
+    <script>
+        const captchaImage = document.getElementById('captchaImage');
+        const imageUrlInput = document.getElementById('imageUrl');
+        const loadImageBtn = document.getElementById('loadImageBtn');
+        const captchaInput = document.getElementById('captchaInput');
+        const submitBtn = document.getElementById('submitBtn');
+        const resultParagraph = document.getElementById('result');
+
+        // Hardcoded solution for sample.png
+        const sampleSolution = "ADUR3"; 
+        
+        // Function to load image based on URL
+        function loadImage(url) {
+            captchaImage.src = url;
+            captchaImage.onerror = () => {
+                resultParagraph.textContent = 'Error loading image. Please check the URL.';
+                resultParagraph.className = 'text-center mt-4 text-lg font-semibold text-red-600';
+            };
+            captchaImage.onload = () => {
+                resultParagraph.textContent = ''; // Clear previous errors
+            };
+        }
+
+        // Check for URL parameter on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const urlParam = params.get('url');
+            if (urlParam) {
+                imageUrlInput.value = urlParam;
+                loadImage(urlParam);
+            } else {
+                loadImage('sample.png'); // Default to attached sample
+            }
+        });
+
+        // Event listener for loading image from input field
+        loadImageBtn.addEventListener('click', () => {
+            const url = imageUrlInput.value.trim();
+            if (url) {
+                loadImage(url);
+            } else {
+                loadImage('sample.png');
+                imageUrlInput.value = ''; // Clear input if sample is loaded
+            }
+        });
+
+        // Event listener for verifying captcha
+        submitBtn.addEventListener('click', () => {
+            const userAnswer = captchaInput.value.trim().toUpperCase(); // Convert to uppercase for case-insensitivity
+            // This is a static solver. For a real captcha, you'd send this to a backend.
+            // For this demo, we check against the hardcoded solution for the *sample.png*.
+            // If another image is loaded, this demo won't "solve" it, but it allows user input.
+            if (captchaImage.src.includes('sample.png')) {
+                if (userAnswer === sampleSolution) {
+                    resultParagraph.textContent = 'Correct!';
+                    resultParagraph.className = 'text-center mt-4 text-lg font-semibold text-green-600';
+                } else {
+                    resultParagraph.textContent = 'Incorrect, try again.';
+                    resultParagraph.className = 'text-center mt-4 text-lg font-semibold text-red-600';
+                }
+            } else {
+                // If a different image is loaded, we can't verify it client-side without a real captcha solving engine.
+                // We'll just indicate that user input was received.
+                resultParagraph.textContent = 'Input received for custom image. (No client-side verification for custom images)';
+                resultParagraph.className = 'text-center mt-4 text-lg font-semibold text-blue-600';
+            }
+        });
+    </script>
+</body>
+</html>
